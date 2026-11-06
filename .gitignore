@@ -163,6 +163,10 @@ env/
 venv/
 ENV/
 env.bak/
+
+# Local Docker overrides and runtime data
+compose.override.yaml
+*.sql
 venv.bak/
 
 # Spyder project settings

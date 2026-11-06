@@ -1,0 +1,55 @@
+services:
+  gateway:
+    image: caddy:2.10-alpine
+    ports:
+      - "${GATEWAY_HTTP_PORT:-8080}:80"
+    volumes:
+      - ./gateway/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      legacy:
+        condition: service_started
+    restart: unless-stopped
+
+  legacy:
+    image: ghcr.io/fmfi-svt/candle-php:1268d1c
+    platform: linux/amd64
+    volumes:
+      - ./legacy/config/databases.yml:/var/www/html/config/databases.yml:ro
+      - ./legacy/config/app.yml:/var/www/html/apps/frontend/config/app.yml:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
+    expose:
+      - "80"
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0.36
+    command: >-
+      --default-authentication-plugin=mysql_native_password
+      --log-error-suppression-list=MY-013360
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-candle}
+      MYSQL_USER: ${MYSQL_USER:-candle}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-candle}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    expose:
+      - "3306"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD}"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  caddy_config:
+  caddy_data:
+  mysql_data:

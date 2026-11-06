@@ -1,0 +1,10 @@
+:80 {
+    log {
+        output stdout
+        format console
+    }
+
+    reverse_proxy legacy:80 {
+        header_down X-Application legacy
+    }
+}
