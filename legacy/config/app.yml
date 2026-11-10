@@ -1,6 +1,6 @@
 all:
-    semester_start: 2013-02-11
-    semester_end: 2013-05-17
+    semester_start: 2025-09-22
+    semester_end: 2025-12-19
     calendar_timezone: Europe/Bratislava
     analytics_account: UA-21193959-1
     cosign_logout_url: https://login.uniba.sk/logout.cgi

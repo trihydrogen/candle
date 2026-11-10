@@ -167,6 +167,7 @@ env.bak/
 # Local Docker overrides and runtime data
 compose.override.yaml
 *.sql
+!fixtures/db/**/*.sql
 venv.bak/
 
 # Spyder project settings

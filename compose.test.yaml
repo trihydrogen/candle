@@ -1,0 +1,16 @@
+# Test-only overrides for characterization (used with compose.yaml via pytest-docker).
+# Does not affect the long-running dev stack (different project name + volumes).
+
+services:
+  gateway:
+    ports: !override
+      - "18080:80"
+
+  legacy:
+    volumes:
+      - ./fixtures:/fixtures:ro
+
+  mysql:
+    # Anonymous data volume (ephemeral with `down -v`)
+    volumes: !override
+      - /var/lib/mysql

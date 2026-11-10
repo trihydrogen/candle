@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
 
   legacy:
-    image: ghcr.io/fmfi-svt/candle-php:1268d1c
+    image: ghcr.io/fmfi-svt/candle-php:e0e1293
     platform: linux/amd64
     volumes:
       - ./legacy/config/databases.yml:/var/www/html/config/databases.yml:ro
@@ -30,6 +30,8 @@ services:
     command: >-
       --default-authentication-plugin=mysql_native_password
       --log-error-suppression-list=MY-013360
+      --character-set-server=utf8mb3
+      --collation-server=utf8_slovak_ci
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-candle}
       MYSQL_USER: ${MYSQL_USER:-candle}
